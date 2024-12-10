@@ -1,0 +1,17 @@
+services:
+  db:
+    profiles:
+      - production
+      - development
+
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+      context: ./db
+      args:
+        PORT: 5432
+        PASSWORD: ${DATABASE_PASSWORD}
+        DATABASE_NAME: ${DATABASE_NAME}
+
+    volumes:
+      - /volumes/data:/var/lib/postgresql/data
