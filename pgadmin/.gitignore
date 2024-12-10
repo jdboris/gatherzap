@@ -1,0 +1,5 @@
+# env files
+.env*
+
+# Container volumes
+/volumes/

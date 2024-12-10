@@ -15,3 +15,22 @@ services:
 
     volumes:
       - /volumes/data:/var/lib/postgresql/data
+
+  pgadmin:
+    profiles:
+      - production
+      - development
+
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+      context: ./pgadmin
+      args:
+        PORT: 8080
+        ADMIN_EMAIL: ${ADMIN_EMAIL}
+        ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+    ports:
+      - 8080:8080
+    volumes:
+      - ./pgadmin/volumes/data:/var/lib/pgadmin
