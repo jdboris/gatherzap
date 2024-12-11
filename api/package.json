@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node --env-file=.env dist/index.js",
+    "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
     "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "tsc"
   },
@@ -13,6 +14,7 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "prisma": "^6.0.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },

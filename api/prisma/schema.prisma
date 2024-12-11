@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                 @id @default(autoincrement())
+  fullName          String
+  birthDate         DateTime
+  avatarId          Int                 @unique
+  avatar            Avatar              @relation(fields: [avatarId], references: [id])
+  gatheringStarter  GatheringStarter[]
+  gatheringAttendee GatheringAttendee[]
+}
+
+model Avatar {
+  id   Int   @id @default(autoincrement())
+  User User?
+
+  topType         String
+  accessoriesType String
+  hairColor       String?
+  facialHairType  String
+  facialHairColor String?
+  clotheType      String
+  clotheColor     String?
+  graphicType     String?
+  eyeType         String
+  eyebrowType     String
+  mouthType       String
+  skinColor       String
+}
+
+model Gathering {
+  id                      Int                 @id @default(autoincrement())
+  title                   String
+  tagline                 String
+  description             String
+  isActive                Boolean
+  startDatetime           DateTime
+  isStartDatetimeStrict   Boolean
+  endDatetime             DateTime
+  isEndDatetimeStrict     Boolean
+  attendeeMinimum         Int
+  isAttendeeMinimumStrict Boolean
+  attendeeMaximum         Int
+  isAttendeeMaximumStrict Boolean
+  ageMinimum              Int
+  isAgeMinimumStrict      Boolean
+  ageMaximum              Int
+  isAgeMaximumStrict      Boolean
+  gatheringStarter        GatheringStarter[]
+  gatheringAttendee       GatheringAttendee[]
+}
+
+model GatheringStarter {
+  id          Int       @id @default(autoincrement())
+  gatheringId Int
+  gathering   Gathering @relation(fields: [gatheringId], references: [id])
+  starterId   Int
+  starter     User      @relation(fields: [starterId], references: [id])
+}
+
+model GatheringAttendee {
+  id          Int       @id @default(autoincrement())
+  gatheringId Int
+  gathering   Gathering @relation(fields: [gatheringId], references: [id])
+  attendeeId  Int
+  attendee    User      @relation(fields: [attendeeId], references: [id])
+}
