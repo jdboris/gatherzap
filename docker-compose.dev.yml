@@ -1,6 +1,44 @@
 # DEVELOPMENT
 
 services:
+  app:
+    build:
+      target: dev-stage
+
+    develop:
+      watch:
+        - action: sync
+          path: ./app/web/src
+          target: /app/web/src
+
+        - action: sync
+          path: ./app/web/public
+          target: /app/web/public
+
+        - action: rebuild
+          path: ./app/web/package.json
+          target: /app
+
+        - action: rebuild
+          path: ./app/web/eslint.config.mjs
+          target: /app
+
+        - action: rebuild
+          path: ./app/web/tsconfig.json
+          target: /app
+
+        - action: rebuild
+          path: ./app/web/next.config.ts
+          target: /app
+
+        - action: rebuild
+          path: ./app/web/postcss.config.mjs
+          target: /app
+
+        - action: rebuild
+          path: ./app/web/tailwind.config.ts
+          target: /app
+
   api:
     build:
       target: dev-stage

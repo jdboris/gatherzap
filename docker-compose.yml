@@ -1,4 +1,21 @@
 services:
+  app:
+    container_name: app
+
+    profiles:
+      - production
+      - development
+
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+      context: ./app
+      args:
+        PORT: ${APP_PORT}
+
+    ports:
+      - 80:${APP_PORT}
+
   api:
     container_name: api
 
