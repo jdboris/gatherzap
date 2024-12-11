@@ -1,5 +1,7 @@
 services:
   api:
+    container_name: api
+
     profiles:
       - production
       - development
@@ -16,6 +18,8 @@ services:
       - "${API_PORT}:${API_PORT}"
 
   db:
+    container_name: db
+
     profiles:
       - production
       - development
@@ -33,6 +37,8 @@ services:
       - /volumes/data:/var/lib/postgresql/data
 
   pgadmin:
+    container_name: pgadmin
+
     profiles:
       - production
       - development
