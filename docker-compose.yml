@@ -34,7 +34,7 @@ services:
         DATABASE_NAME: ${DATABASE_NAME}
 
     volumes:
-      - /volumes/data:/var/lib/postgresql/data
+      - ./db/volumes/data:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin
