@@ -1,4 +1,20 @@
 services:
+  api:
+    profiles:
+      - production
+      - development
+
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+      context: ./api
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+        PORT: ${API_PORT}
+
+    ports:
+      - "${API_PORT}:${API_PORT}"
+
   db:
     profiles:
       - production
