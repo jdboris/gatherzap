@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env dist/index.js",
+    "start": "node",
     "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
-    "dev": "tsx watch --env-file=.env src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc"
   },
   "keywords": [],
