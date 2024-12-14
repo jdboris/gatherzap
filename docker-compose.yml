@@ -14,7 +14,7 @@ services:
         PORT: ${APP_PORT}
 
     ports:
-      - 80:${APP_PORT}
+      - ${APP_PORT}:${APP_PORT}
 
   api:
     container_name: api
