@@ -68,11 +68,11 @@ services:
       dockerfile: ./Dockerfile
       context: ./pgadmin
       args:
-        PORT: 8080
+        PORT: ${PGADMIN_PORT}
         ADMIN_EMAIL: ${ADMIN_EMAIL}
         ADMIN_PASSWORD: ${ADMIN_PASSWORD}
 
     ports:
-      - 8080:8080
+      - ${PGADMIN_PORT}:${PGADMIN_PORT}
     volumes:
       - ./pgadmin/volumes/data:/var/lib/pgadmin
