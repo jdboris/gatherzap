@@ -1,14 +1,21 @@
+import Map from "@/components/Map";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
     <>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+      <header className="flex justify-end">
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header>
+      <main className="h-full">
+        <Map />
+      </main>
+      <footer></footer>
     </>
   );
 }
