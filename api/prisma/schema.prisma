@@ -61,6 +61,8 @@ model Gathering {
   isAgeMaximumStrict      Boolean
   gatheringStarter        GatheringStarter[]
   gatheringAttendee       GatheringAttendee[]
+  latitude                Float
+  longitude               Float
 }
 
 model GatheringStarter {
