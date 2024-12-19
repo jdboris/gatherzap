@@ -2,12 +2,12 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 import {
-  APIProvider,
   Map as GoogleMap,
   useMap,
   AdvancedMarker,
   MapCameraChangedEvent,
   Pin,
+  MapMouseEvent,
 } from "@vis.gl/react-google-maps";
 
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
@@ -88,6 +88,8 @@ function monitorLocationPermissions({
 }
 
 const Map = () => {
+  const map = useMap();
+
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -109,36 +111,41 @@ const Map = () => {
   useEffect(() => {
     (async () => {
       try {
-        setUserLocation(await getDeviceLocation());
+        if (!map) return;
+
+        if (!userLocation) {
+          const location = await getDeviceLocation();
+          setUserLocation(location);
+          map.panTo({ lat: location.latitude, lng: location.longitude });
+          map.setZoom(15);
+        }
       } catch (error) {
         console.error(error);
       }
     })();
-  }, [arePermissionsGranted]);
+  }, [map, userLocation, arePermissionsGranted]);
 
   return (
-    <APIProvider
-      apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-      onLoad={() => console.log("Maps API has loaded.")}
+    <GoogleMap
+      defaultZoom={userLocation ? 15 : 3}
+      defaultCenter={{
+        lat: userLocation?.latitude || 0,
+        lng: userLocation?.longitude || 0,
+      }}
+      onCameraChanged={(ev: MapCameraChangedEvent) =>
+        console.log(
+          "camera changed:",
+          ev.detail.center,
+          "zoom:",
+          ev.detail.zoom
+        )
+      }
+      onClick={(ev: MapMouseEvent) => {
+        console.log(ev.detail.latLng);
+      }}
     >
-      <GoogleMap
-        zoom={userLocation ? 15 : 3}
-        center={{
-          lat: userLocation?.latitude || 0,
-          lng: userLocation?.longitude || 0,
-        }}
-        onCameraChanged={(ev: MapCameraChangedEvent) =>
-          console.log(
-            "camera changed:",
-            ev.detail.center,
-            "zoom:",
-            ev.detail.zoom
-          )
-        }
-      >
-        <GatheringMarkers gatherings={locations} />
-      </GoogleMap>
-    </APIProvider>
+      <GatheringMarkers gatherings={locations} />
+    </GoogleMap>
   );
 };
 
