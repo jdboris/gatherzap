@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id                Int                 @id @default(autoincrement())
+  idInAuthService   String
   fullName          String
   birthDate         DateTime
   phoneNumber       String
