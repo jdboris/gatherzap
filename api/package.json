@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node",
     "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src",
     "build": "tsc"
   },
   "keywords": [],
