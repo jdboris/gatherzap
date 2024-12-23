@@ -17,10 +17,24 @@ model User {
   id                Int                 @id @default(autoincrement())
   fullName          String
   birthDate         DateTime
+  phoneNumber       String
   avatarId          Int                 @unique
   avatar            Avatar              @relation(fields: [avatarId], references: [id])
   gatheringStarter  GatheringStarter[]
   gatheringAttendee GatheringAttendee[]
+  role              Role                @relation(fields: [roleId], references: [id])
+  roleId            Int
+}
+
+enum RoleName {
+  USER
+  ADMIN
+}
+
+model Role {
+  id   Int      @id @default(autoincrement())
+  name RoleName
+  User User[]
 }
 
 model Avatar {
