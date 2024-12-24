@@ -1,7 +1,12 @@
 import express, { Request, Response } from "express";
+import requestLogger from "./middleware/request-logger";
 
 const app = express();
 const { PORT, NODE_ENV } = process.env;
+
+if (NODE_ENV == "development") {
+  app.use(requestLogger);
+}
 
 app.use(express.json());
 
