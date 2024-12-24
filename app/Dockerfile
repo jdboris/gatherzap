@@ -1,4 +1,4 @@
-FROM node:22.4.0-alpine3.20 AS base-stage
+FROM node:22.12.0-alpine AS base-stage
 
 ARG ENVIRONMENT
 ENV NODE_ENV=$ENVIRONMENT
