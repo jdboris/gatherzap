@@ -11,6 +11,7 @@ services:
       dockerfile: ./Dockerfile
       context: ./app
       args:
+        ENVIRONMENT: ${ENVIRONMENT}
         PORT: ${APP_PORT}
         NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
         GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
