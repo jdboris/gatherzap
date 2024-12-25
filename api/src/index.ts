@@ -10,7 +10,7 @@ if (NODE_ENV == "development") {
 
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_: Request, res: Response) => {
   res.send("hello world");
 });
 
