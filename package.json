@@ -8,10 +8,6 @@
     "packages": [
       "api/**",
       "app/**"
-    ],
-    "nohoist": [
-      "api/**",
-      "app/**"
     ]
   }
 }
