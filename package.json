@@ -1,0 +1,17 @@
+{
+  "name": "gatherzap",
+  "version": "1.0.0",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "workspaces": {
+    "packages": [
+      "api/**",
+      "app/**"
+    ],
+    "nohoist": [
+      "api/**",
+      "app/**"
+    ]
+  }
+}
