@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env ./dist/index.js",
     "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
-    "dev": "tsx watch src",
+    "prisma:generate": "npx prisma generate",
+    "dev": "npm run prisma:generate && tsx watch src",
     "build": "tsc"
   },
   "keywords": [],
