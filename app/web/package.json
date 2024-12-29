@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/elements": "^0.22.5",
     "@clerk/nextjs": "^6.9.2",
+    "@gatherzap/schemas": "*",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@vis.gl/react-google-maps": "^1.4.2",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "next": "15.1.0",
     "react": "^19.0.0",

@@ -141,7 +141,7 @@ const Map = () => {
         )
       }
       onClick={(ev: MapMouseEvent) => {
-        console.log(ev.detail.latLng);
+        console.log("clicked at: ", ev.detail.latLng);
       }}
     >
       <GatheringMarkers gatherings={locations} />

@@ -1,7 +1,7 @@
 "use client";
 
-import Map from "@/components/Map";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import Map from "@/components/map";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import Link from "next/link";
 
@@ -19,7 +19,8 @@ export default function Home() {
 
           <div>
             <SignedOut>
-              <SignInButton />
+              <Link href={"/sign-up"}>Sign Up</Link>
+              <Link href={"/log-in"}>Log In</Link>
             </SignedOut>
             <SignedIn>
               <UserButton />
