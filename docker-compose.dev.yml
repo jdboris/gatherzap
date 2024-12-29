@@ -8,36 +8,40 @@ services:
     develop:
       watch:
         - action: sync
+          path: ./api/src
+          target: /gatherzap/api/src
+
+        - action: sync
           path: ./app/web/src
-          target: /app/web/src
+          target: /gatherzap/app/web/src
 
         - action: sync
           path: ./app/web/public
-          target: /app/web/public
+          target: /gatherzap/app/web/public
 
         - action: rebuild
           path: ./app/web/package.json
-          target: /app
+          target: /gatherzap/app
 
         - action: rebuild
           path: ./app/web/eslint.config.mjs
-          target: /app
+          target: /gatherzap/app
 
         - action: rebuild
           path: ./app/web/tsconfig.json
-          target: /app
+          target: /gatherzap/app
 
         - action: rebuild
           path: ./app/web/next.config.ts
-          target: /app
+          target: /gatherzap/app
 
         - action: rebuild
           path: ./app/web/postcss.config.mjs
-          target: /app
+          target: /gatherzap/app
 
         - action: rebuild
           path: ./app/web/tailwind.config.ts
-          target: /app
+          target: /gatherzap/app
 
   api:
     build:
@@ -47,12 +51,12 @@ services:
       watch:
         - action: sync
           path: ./api/src
-          target: /app/src
+          target: /gatherzap/api/src
 
         - action: rebuild
           path: ./api/package.json
-          target: /app
+          target: /gatherzap/api
 
         - action: rebuild
           path: ./api/tsconfig.json
-          target: /app
+          target: /gatherzap/api
