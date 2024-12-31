@@ -14,13 +14,28 @@ export default function Home() {
       >
         <header className="flex justify-between">
           <nav>
-            <Link href={"/"}>Gatherzap</Link>
+            <Link
+              href={"/"}
+              className="text-green inline-flex p-4 text-xl font-semibold"
+            >
+              Gatherzap
+            </Link>
           </nav>
 
-          <div>
+          <div className="inline-flex items-center px-2">
             <SignedOut>
-              <Link href={"/sign-up"}>Sign Up</Link>
-              <Link href={"/log-in"}>Log In</Link>
+              <Link
+                href={"/sign-up"}
+                className="text-green inline-flex px-2 py-4"
+              >
+                Sign Up
+              </Link>
+              <Link
+                href={"/log-in"}
+                className="text-green inline-flex px-2 py-4"
+              >
+                Log In
+              </Link>
             </SignedOut>
             <SignedIn>
               <UserButton />

@@ -23,6 +23,9 @@
    CLERK_SECRET_KEY=...       # See Clerk docs
 
    GOOGLE_MAPS_API_KEY=...    # See Google Maps docs
+
+   # Feature flags:
+   COMING_SOON_MODE=...       # "true" or "false"
    ```
 
 ## Run

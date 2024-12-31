@@ -1,6 +1,21 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { COMING_SOON_MODE } from "./utils/feature-flags";
 
-export default clerkMiddleware();
+export default function customMiddleware(
+  req: NextRequest,
+  event: NextFetchEvent
+) {
+  if (COMING_SOON_MODE) {
+    const url = new URL(req.url);
+    if (url.pathname !== "/") {
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  return clerkMiddleware()(req, event);
+}
 
 export const config = {
   matcher: [
