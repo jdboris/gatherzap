@@ -7,7 +7,13 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    colors: {
+      green: "#1FAB89",
+      white: "#FFFFFF",
+    },
+    fontFamily: {
+      sans: ["REM", "sans-serif"],
+    },
   },
   plugins: [],
 } satisfies Config;

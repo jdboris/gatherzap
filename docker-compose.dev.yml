@@ -7,6 +7,9 @@ services:
 
     develop:
       watch:
+        - action: rebuild
+          path: .env
+
         - action: sync
           path: ./api/src
           target: /gatherzap/api/src
@@ -49,6 +52,9 @@ services:
 
     develop:
       watch:
+        - action: rebuild
+          path: .env
+
         - action: sync
           path: ./api/src
           target: /gatherzap/api/src

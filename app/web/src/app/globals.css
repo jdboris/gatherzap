@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "REM";
+  src: url("/fonts/REM-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "REM";
+  src: url("/fonts/REM-Italic-VariableFont_wght.ttf") format("truetype");
+  font-style: italic;
+}
