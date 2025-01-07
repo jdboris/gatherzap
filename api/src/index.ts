@@ -5,7 +5,7 @@ import { COMING_SOON_MODE } from "./utils/feature-flags";
 const app = express();
 const { PORT, NODE_ENV } = process.env;
 
-if (!COMING_SOON_MODE) {
+if (COMING_SOON_MODE) {
   app.use(/.*/, (_: Request, res: Response) => {
     res.status(404).send("This route does not exist.");
   });
