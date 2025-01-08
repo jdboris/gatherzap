@@ -5,7 +5,7 @@
 ## Prerequisites
 
 1. Clone the repo
-2. Insall and run [Docker Desktop](https://docs.docker.com/desktop)
+2. Insall and run Docker (i.e. with [Docker Desktop](https://docs.docker.com/desktop))
 3. Create `.env`...
 
    ```
