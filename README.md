@@ -32,5 +32,5 @@
 ## Run
 
 ```
-./scripts/run.sh
+sh ./scripts/run.sh
 ```
