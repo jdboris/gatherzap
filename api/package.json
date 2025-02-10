@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node --env-file-if-exists=.env ./dist/index.js",
-    "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
+    "db:migrate": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma migrate dev\"",
     "prisma:generate": "npx prisma generate",
     "dev": "npm run prisma:generate && tsx watch src",
     "build": "tsc"
