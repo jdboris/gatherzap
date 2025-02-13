@@ -34,7 +34,7 @@ enum RoleName {
 
 model Role {
   id   Int      @id @default(autoincrement())
-  name RoleName
+  name RoleName @unique
   User User[]
 }
 
