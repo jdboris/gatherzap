@@ -51,3 +51,5 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 CMD ["npm", "run", "start"]
+
+# CMD ["tail", "-f", "/dev/null"]
