@@ -4,21 +4,27 @@
   "main": "index.js",
   "scripts": {
     "start": "node --env-file-if-exists=.env ./dist/index.js",
-    "db:migrate": "docker exec -it api sh -c \"cd /app && npx prisma migrate dev\"",
+    "db:migrate": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma migrate dev\"",
+    "db:seed": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma db seed\"",
     "prisma:generate": "npx prisma generate",
     "dev": "npm run prisma:generate && tsx watch src",
     "build": "tsc"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "prisma": "^6.0.1",
+    "prisma": "^6.3.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@clerk/express": "^1.3.31",
+    "@prisma/client": "^6.3.1",
     "express": "^5.0.1",
     "schemas": "file:src/schemas"
   }

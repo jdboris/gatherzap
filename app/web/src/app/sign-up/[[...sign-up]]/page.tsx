@@ -2,12 +2,9 @@
 
 import * as Clerk from "@clerk/elements/common";
 import * as SignUp from "@clerk/elements/sign-up";
-import signupSchema, {
-  SignupSchema,
-  PartialSignupSchema,
-} from "@gatherzap/schemas/signup";
-import { format, parse } from "date-fns";
-import { isValid as isValidDate } from "date-fns/fp";
+import accountSchema from "@gatherzap/schemas/account-schema";
+import signupSchema, { SignupSchema } from "@gatherzap/schemas/signup-schema";
+import { format, isValid as isValidDate, parse } from "date-fns";
 import {
   ChangeEvent,
   FocusEvent,
@@ -18,12 +15,22 @@ import {
 import { ZodIssue } from "zod";
 
 export default function SignUpPage() {
-  const [signupData, setSignupData] = useState<PartialSignupSchema>({});
+  const [signupData, setSignupData] = useState<Partial<SignupSchema>>({});
   const [errors, setErrors] = useState<ZodIssue[]>([]);
 
   useEffect(() => {
+    if (Object.keys(signupData).length == 0) {
+      return;
+    }
+
+    const { data: accountData } = accountSchema.partial().safeParse(signupData);
+
+    if (!accountData) {
+      return;
+    }
+
     // Save for the onboarding stage that comes later
-    localStorage.setItem("signup-data", JSON.stringify(signupData));
+    window.localStorage.setItem("account-data", JSON.stringify(accountData));
   }, [signupData]);
 
   function parseValue(value: string, type: string) {

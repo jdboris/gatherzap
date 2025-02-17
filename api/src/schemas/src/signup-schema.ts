@@ -34,7 +34,3 @@ const signupSchema = z.object({
 export default signupSchema;
 
 export type SignupSchema = z.infer<typeof signupSchema>;
-
-const partial = signupSchema.partial();
-
-export type PartialSignupSchema = z.infer<typeof partial>;

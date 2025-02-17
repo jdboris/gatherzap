@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       ENVIRONMENT: "production" | "development";
       PORT: string;
+      API_PORT: string;
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: string;
       CLERK_SECRET_KEY: string;
       NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string;

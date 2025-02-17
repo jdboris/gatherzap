@@ -11,6 +11,18 @@ const __dirname = dirname(__filename);
 config({ override: true });
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    if (process.env.NODE_ENV != "development") {
+      return [];
+    }
+
+    return [
+      {
+        source: "/api/:path*",
+        destination: `http://api:${process.env.API_PORT}/api/:path*`,
+      },
+    ];
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

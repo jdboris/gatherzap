@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id                Int                 @id @default(autoincrement())
-  idInAuthService   String
+  idInAuthService   String              @unique
   fullName          String
   birthDate         DateTime
   phoneNumber       String
@@ -34,26 +34,26 @@ enum RoleName {
 
 model Role {
   id   Int      @id @default(autoincrement())
-  name RoleName
+  name RoleName @unique
   User User[]
 }
 
+// Matches DiceBear "Big Ears"
 model Avatar {
   id   Int   @id @default(autoincrement())
   User User?
 
-  topType         String
-  accessoriesType String
-  hairColor       String?
-  facialHairType  String
-  facialHairColor String?
-  clotheType      String
-  clotheColor     String?
-  graphicType     String?
-  eyeType         String
-  eyebrowType     String
-  mouthType       String
-  skinColor       String
+  cheek     String?
+  ear       String
+  eyes      String
+  face      String
+  frontHair String?
+  hair      String?
+  hairColor String
+  mouth     String
+  nose      String
+  sideburn  String?
+  skinColor String
 }
 
 model Gathering {
