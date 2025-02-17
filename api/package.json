@@ -8,7 +8,7 @@
     "db:seed": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma db seed\"",
     "prisma:generate": "npx prisma generate",
     "dev": "npm run prisma:generate && tsx watch src",
-    "build": "tsc"
+    "build": "npm run prisma:generate && tsc"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
