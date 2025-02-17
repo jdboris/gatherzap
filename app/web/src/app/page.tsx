@@ -1,11 +1,14 @@
 "use client";
 
 import Map from "@/components/map";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/auth-context";
+import { SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import Link from "next/link";
 
 export default function Home() {
+  const { user, isLoading: isLoadingUser } = useAuth();
+
   return (
     <>
       <APIProvider
@@ -38,7 +41,10 @@ export default function Home() {
               </Link>
             </SignedOut>
             <SignedIn>
-              <UserButton />
+              {!isLoadingUser && !user && (
+                <Link href="/account">Complete Account Setup</Link>
+              )}
+              <SignOutButton />
             </SignedIn>
           </div>
         </header>
