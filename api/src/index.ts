@@ -1,15 +1,18 @@
-import express, { Request, Response } from "express";
 import express, { NextFunction, Request, Response } from "express";
 import requestLogger from "./middleware/request-logger";
+import authRouter from "./routes/auth-router";
+import { extend } from "./utils/express-extension";
 import { COMING_SOON_MODE } from "./utils/feature-flags";
+import accountRouter from "./routes/account-router";
 import HttpError from "./utils/http-error";
 
-const app = express();
 const { PORT, NODE_ENV } = process.env;
+
+const app = extend(express());
 
 if (COMING_SOON_MODE) {
   app.use(/.*/, (_: Request, res: Response) => {
-    res.status(404).send("This route does not exist.");
+    res.status(404).send();
   });
 }
 
@@ -19,6 +22,8 @@ if (NODE_ENV == "development") {
 
 app.use(express.json());
 
+app.use(authRouter);
+app.use(accountRouter);
 
 app.use(async (error: Error, _: Request, res: Response, __: NextFunction) => {
   if (error instanceof HttpError) {
