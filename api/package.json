@@ -5,9 +5,13 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env ./dist/index.js",
     "db:migrate": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma migrate dev\"",
+    "db:seed": "docker exec -it api sh -c \"cd /gatherzap/api && npx prisma db seed\"",
     "prisma:generate": "npx prisma generate",
     "dev": "npm run prisma:generate && tsx watch src",
     "build": "tsc"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
