@@ -1,6 +1,14 @@
 {
   "name": "@gatherzap/schemas",
   "version": "1.0.0",
+  "exports": {
+    "./avatar-schema": "./src/avatar-schema.ts",
+    "./account-update-schema": "./src/account-update-schema.ts",
+    "./account-schema": "./src/account-schema.ts",
+    "./error-schema": "./src/error-schema.ts",
+    "./signup-schema": "./src/signup-schema.ts",
+    "./user-schema": "./src/user-schema.ts"
+  },
   "scripts": {
     "build": "tsc"
   },
