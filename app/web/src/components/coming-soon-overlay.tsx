@@ -6,7 +6,7 @@ export default function ComingSoonOverlay() {
       <div className="rounded-xl p-7 max-w-96 drop-shadow-md gap flex flex-col gap-1 text-center bg-white">
         <div className="text-2xl">Coming Soon...</div>
         <div>Gatherzap is currently under development.</div>
-        <div>Stay tuned for great things in early 2025!</div>
+        <div>Stay tuned for great things coming mid 2025!</div>
         <div>
           Follow for updates:{" "}
           <a
