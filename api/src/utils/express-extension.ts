@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
 import { IRouter, PathParams } from "express-serve-static-core";
-import { RequireRoleMiddleware } from "../middleware/auth";
+import { RequireRoleMiddleware } from "../middleware/auth-middleware";
 import {
   ValidateRequestBodyMiddleware,
   ValidateResponseBodyMiddleware,
-} from "../middleware/validatation";
+} from "../middleware/validatation-middleware";
 
 const methodNames = ["post", "put", "patch", "get", "delete"] as const;
 

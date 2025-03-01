@@ -1,11 +1,11 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
-import { requireRole } from "../middleware/auth";
+import { requireRole } from "../middleware/auth-middleware";
 import {
   validateRequestBody,
   validateResponseBody,
-} from "../middleware/validatation";
+} from "../middleware/validatation-middleware";
 import accountUpdateSchema from "../schemas/src/account-update-schema";
 import { extend } from "../utils/express-extension";
 

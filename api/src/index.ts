@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import requestLogger from "./middleware/request-logger";
+import requestLogger from "./middleware/request-logger-middleware";
 import authRouter from "./routes/auth-router";
 import { extend } from "./utils/express-extension";
 import { COMING_SOON_MODE } from "./utils/feature-flags";
