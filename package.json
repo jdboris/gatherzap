@@ -1,6 +1,7 @@
 {
   "name": "gatherzap",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {},
   "author": "",
   "license": "ISC",
@@ -9,5 +10,9 @@
       "api/**",
       "app/**"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^3.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.11"
   }
 }
