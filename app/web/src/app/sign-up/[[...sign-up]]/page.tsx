@@ -1,6 +1,7 @@
 "use client";
 
 import Carousel from "@/components/carousel";
+import LoadingSpinner from "@/components/loading-spinner";
 import useFormData from "@/hooks/use-form-data";
 import * as Clerk from "@clerk/elements/common";
 import * as SignUp from "@clerk/elements/sign-up";
@@ -119,12 +120,24 @@ export default function SignUpPage() {
             <Errors messages={getErrorMessages("password")} />
           </Clerk.Field>
 
-          <SignUp.Action
-            submit
-            className="bg-primary-600 focus:ring-primary-300 mb-2 me-2 w-full rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
-          >
-            Sign up
-          </SignUp.Action>
+          <Clerk.Loading>
+            {(isLoading) => (
+              <SignUp.Action
+                submit
+                disabled={isLoading}
+                className="bg-primary-600 focus:ring-primary-300 mb-2 me-2 w-full rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
+              >
+                {isLoading ? (
+                  <>
+                    <LoadingSpinner />
+                    Loading...
+                  </>
+                ) : (
+                  "Sign up"
+                )}
+              </SignUp.Action>
+            )}
+          </Clerk.Loading>
         </SignUp.Step>
 
         <SignUp.Step
@@ -143,13 +156,24 @@ export default function SignUpPage() {
               <Clerk.FieldError />
             </Clerk.Field>
 
-            <SignUp.Action
-              submit
-              className="bg-primary-600 focus:ring-primary-300 mb-2 me-2 w-full rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
-            >
-              Verify
-            </SignUp.Action>
-
+            <Clerk.Loading>
+              {(isLoading) => (
+                <SignUp.Action
+                  submit
+                  disabled={isLoading}
+                  className="bg-primary-600 focus:ring-primary-300 mb-2 me-2 w-full rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4"
+                >
+                  {isLoading ? (
+                    <>
+                      <LoadingSpinner />
+                      Loading...
+                    </>
+                  ) : (
+                    "Verify"
+                  )}
+                </SignUp.Action>
+              )}
+            </Clerk.Loading>
             <SignUp.Action
               resend
               fallback={({ resendableAfter }) => (
