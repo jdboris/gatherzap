@@ -71,6 +71,7 @@ export default function SignUpPage() {
           <Clerk.Field name="fullName" className="pb-5">
             <Clerk.Label>Full Name</Clerk.Label>
             <Clerk.Input
+              autoFocus
               value={signupData.fullName}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -152,7 +153,10 @@ export default function SignUpPage() {
             <Clerk.GlobalError className="text-red" />
 
             <Clerk.Field name="code">
-              <Clerk.Input className="invalid:border-red mb-2 me-2 mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-2xl text-gray-900 invalid:bg-rose-50" />
+              <Clerk.Input
+                autoFocus
+                className="invalid:border-red mb-2 me-2 mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-2xl text-gray-900 invalid:bg-rose-50"
+              />
               <Clerk.FieldError />
             </Clerk.Field>
 
