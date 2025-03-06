@@ -19,7 +19,7 @@ export default function Home() {
           <nav>
             <Link
               href={"/"}
-              className="text-green inline-flex p-4 text-xl font-semibold"
+              className="text-primary inline-flex p-4 text-xl font-semibold"
             >
               Gatherzap
             </Link>
@@ -29,13 +29,13 @@ export default function Home() {
             <SignedOut>
               <Link
                 href={"/sign-up"}
-                className="text-green inline-flex px-2 py-4"
+                className="text-primary inline-flex px-2 py-4"
               >
                 Sign Up
               </Link>
               <Link
                 href={"/log-in"}
-                className="text-green inline-flex px-2 py-4"
+                className="text-primary inline-flex px-2 py-4"
               >
                 Log In
               </Link>
