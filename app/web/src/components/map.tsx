@@ -31,9 +31,9 @@ function getDeviceLocation() {
         (error) => {
           reject(error);
         },
-        {}
+        {},
       );
-    }
+    },
   );
 }
 
@@ -81,8 +81,6 @@ const Map = () => {
 
   const [arePermissionsGranted, setArePermissionsGranted] = useState<boolean>();
 
-  console.log("COMING_SOON_MODE: ", COMING_SOON_MODE);
-
   useEffect(() => {
     if (!COMING_SOON_MODE) {
       monitorLocationPermissions({
@@ -127,7 +125,7 @@ const Map = () => {
           "camera changed:",
           ev.detail.center,
           "zoom:",
-          ev.detail.zoom
+          ev.detail.zoom,
         )
       }
       onClick={(ev: MapMouseEvent) => {
@@ -150,7 +148,7 @@ const GatheringMarkers = (props: { gatherings: Gathering[] }) => {
       console.log("marker clicked: ", ev.latLng.toString());
       map.panTo(ev.latLng);
     },
-    [map]
+    [map],
   );
   // Initialize MarkerClusterer, if the map has changed
   useEffect(() => {

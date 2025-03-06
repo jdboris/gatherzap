@@ -42,9 +42,18 @@ export default function Home() {
             </SignedOut>
             <SignedIn>
               {!isLoadingUser && !user && (
-                <Link href="/account">Complete Account Setup</Link>
+                <Link
+                  href="/account"
+                  className="text-primary inline-flex px-2 py-4"
+                >
+                  Complete Account Setup
+                </Link>
               )}
-              <SignOutButton />
+              <SignOutButton>
+                <span className="text-primary inline-flex px-2 py-4">
+                  Sign Out
+                </span>
+              </SignOutButton>
             </SignedIn>
           </div>
         </header>
