@@ -2,7 +2,7 @@
 
 import Carousel from "@/components/carousel";
 import LoadingSpinner from "@/components/loading-spinner";
-import { buttonClassName } from "@/components/ui/button";
+import { Button, buttonClassName } from "@/components/ui/button";
 import { inputClassName } from "@/components/ui/input";
 import useFormData from "@/hooks/use-form-data";
 import * as Clerk from "@clerk/elements/common";
@@ -11,6 +11,7 @@ import accountSchema from "@gatherzap/schemas/account-schema";
 import signupSchema from "@gatherzap/schemas/signup-schema";
 import { format, isValid as isValidDate } from "date-fns";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function SignUpPage() {
@@ -206,7 +207,7 @@ export default function SignUpPage() {
             <SignUp.Action
               navigate="previous"
               className={
-                "self-start " + buttonClassName({ variant: "secondary" })
+                "group self-start " + buttonClassName({ variant: "secondary" })
               }
             >
               <ArrowLeftIcon
@@ -220,6 +221,18 @@ export default function SignUpPage() {
         </SignUp.Step>
       </SignUp.Root>
       <div id="clerk-captcha" className="absolute"></div>
+      <div className="flex w-full justify-center">
+        <Button asChild variant={"link"}>
+          <Link href={"/"} className="group">
+            <ArrowLeftIcon
+              className="-ms-1 transition-transform group-hover:-translate-x-0.5"
+              size={16}
+              aria-hidden="true"
+            />{" "}
+            Cancel Signup
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }
