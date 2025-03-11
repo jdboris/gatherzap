@@ -229,7 +229,7 @@ function Errors({
   children,
 }: {
   messages: string[];
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   return (
     <div
