@@ -3,175 +3,138 @@
 import AvatarEditor from "@/components/avatar-editor";
 import { useAccount } from "@/contexts/account-context";
 import { useAuth } from "@/contexts/auth-context";
+import useFormData from "@/hooks/use-form-data";
 import accountSchema, {
   AccountSchema,
 } from "@gatherzap/schemas/account-schema";
 
-import { format, isValid as isValidDate, parse } from "date-fns";
+import { format, isValid as isValidDate } from "date-fns";
 import { useRouter } from "next/navigation";
-import {
-  ChangeEvent,
-  FocusEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { ZodIssue } from "zod";
+import { useEffect } from "react";
 
 export default function AccountPage() {
-  const [accountData, setAccountData] = useState<Partial<AccountSchema>>();
-  const [errors, setErrors] = useState<ZodIssue[]>([]);
   const { updateAccount: completeAccountSetup } = useAccount();
   const { user, refetch: refetchUser } = useAuth();
-  const schema = accountSchema;
   const router = useRouter();
 
-  useEffect(() => {
-    // NOTE: useEffect waits until first client-side render
-    setAccountData(
-      schema
-        .partial()
-        .catch(() => ({}))
-        .parse(JSON.parse(window.localStorage.getItem("account-data") || "{}"))
-    );
-  }, [schema]);
-
-  function parseFieldValue(value: string, type: string) {
-    return type === "number"
-      ? Number(value)
-      : type === "date"
-      ? parse(value, "yyyy-MM-dd", new Date())
-      : value;
-  }
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target) return;
-
-    const { type, name, value } = e.target;
-
-    setAccountData((old) => ({
-      ...old,
-      [name]: parseFieldValue(value, type),
-    }));
-  }, []);
-
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      handleChange(e);
-
-      validateData({
-        ...accountData,
-        [e.target.name]: parseFieldValue(e.target.value, e.target.type),
+  const {
+    data: accountData,
+    setValue,
+    getErrorMessages,
+    isInvalid,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useFormData({
+    initialData: {},
+    schema: accountSchema,
+    onSubmit: async () => {
+      // TODO: Ensure using accountSchema does NOT work (wrong schemam, must use updateAccountSchema instead)
+      await completeAccountSetup(accountSchema.parse(accountData), {
+        onSuccess: () => {
+          refetchUser();
+          router.push("/");
+        },
       });
     },
-    [accountData, schema]
-  );
+  });
 
-  const validateData = (data: Partial<AccountSchema>) => {
-    const { error } = schema.partial().safeParse(data);
-    setErrors(error?.issues || []);
+  // NOTE: useEffect waits until first client-side render, granting access to local storage,
+  useEffect(() => {
+    const { success, data: localStorageData } = accountSchema
+      .partial()
+      .safeParse(
+        JSON.parse(window.localStorage.getItem("account-data") || "{}"),
+      );
 
-    return !Boolean(error);
-  };
+    if (success) {
+      // NOTE: Declaring key separately before the loop makes the TypeScript compiler happy.
+      let key: keyof AccountSchema;
+
+      for (key in localStorageData) {
+        setValue(key, localStorageData[key]);
+      }
+    }
+  }, []);
 
   return accountData ? (
     <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-
-        if (!validateData(accountData)) {
-          return;
-        }
-
-        await completeAccountSetup(schema.parse(accountData), {
-          onSuccess: () => {
-            refetchUser();
-            router.push("/");
-          },
-        });
-      }}
+      onSubmit={handleSubmit}
+      className="container relative m-auto flex flex-col items-center justify-center gap-x-10 gap-y-4"
     >
-      <h1>{user ? <>Account</> : <>Complete Account Setup</>}</h1>
+      <header className="w-full text-center text-4xl">
+        {user ? <>Account</> : <>Complete Account Setup</>}
+      </header>
 
-      <label>Avatar</label>
-
-      <AvatarEditor
-        initialAvatar={accountData.avatar}
-        onChange={(value) => {
-          setAccountData((oldAccountData) => ({
-            ...oldAccountData,
-            avatar: value,
-          }));
-        }}
-      />
-
-      <label>
-        Full Name
-        <input
-          name="fullName"
-          type="text"
-          value={accountData?.fullName}
-          onChange={handleChange}
-          onBlur={handleBlur}
+      <div className="relative m-auto flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        <AvatarEditor
+          initialAvatar={accountData.avatar}
+          onChange={(value) => {
+            setValue("avatar", value);
+          }}
         />
-        <Errors allErrors={errors} fieldName="fullName" />
-      </label>
 
-      <label>
-        Date of Birth
-        <input
-          name="birthDate"
-          type="date"
-          value={
-            accountData.birthDate && isValidDate(accountData.birthDate)
-              ? format(accountData.birthDate, "yyyy-MM-dd")
-              : ""
-          }
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <Errors allErrors={errors} fieldName="birthDate" />
-      </label>
+        <div className="flex flex-col">
+          <label className="pb-4">
+            Full Name
+            <input
+              name="fullName"
+              type="text"
+              value={accountData?.fullName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`${isInvalid("fullName") ? "border-red bg-rose-50" : ""} mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900`}
+            />
+            <Errors messages={getErrorMessages("fullName")} />
+          </label>
 
-      <label>
-        Phone Number
-        <input
-          // disabled
-          name="phoneNumber"
-          type="text"
-          value={accountData.phoneNumber}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <Errors allErrors={errors} fieldName="phoneNumber" />
-      </label>
+          <label className="pb-4">
+            Date of Birth
+            <input
+              name="birthDate"
+              type="date"
+              value={
+                accountData.birthDate && isValidDate(accountData.birthDate)
+                  ? format(accountData.birthDate, "yyyy-MM-dd")
+                  : ""
+              }
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`${isInvalid("birthDate") ? "border-red bg-rose-50" : ""} mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900`}
+            />
+            <Errors messages={getErrorMessages("birthDate")} />
+          </label>
 
-      <button>Save</button>
+          <label className="pb-4">
+            Phone Number
+            <input
+              name="phoneNumber"
+              type="text"
+              value={accountData.phoneNumber}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={`${isInvalid("phoneNumber") ? "border-red bg-rose-50" : ""} mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900`}
+            />
+            <Errors messages={getErrorMessages("phoneNumber")} />
+          </label>
+        </div>
+      </div>
+
+      <button className="bg-primary-600 focus:ring-primary-300 mb-2 me-2 w-full max-w-64 rounded-lg px-5 py-2.5 text-sm font-medium text-white focus:outline-none focus:ring-4">
+        Save
+      </button>
     </form>
   ) : (
     <></>
   );
 }
 
-function Errors({
-  fieldName,
-  allErrors,
-}: {
-  fieldName: keyof AccountSchema;
-  allErrors: ZodIssue[];
-}) {
-  /** Get error messages by key/name */
-  const errorMessages = useMemo(
-    () => allErrors.filter((x) => x.path[0] == fieldName).map((x) => x.message),
-    [allErrors, fieldName]
-  );
-
+function Errors({ messages }: { messages: string[] }) {
   return (
-    <>
-      {errorMessages.map((x, i) => (
-        <div key={`${fieldName}-error-${i}`}>{x}</div>
+    <div className="text-red absolute text-xs">
+      {messages.map((x, i) => (
+        <div key={`error-${i}`}>{x}</div>
       ))}
-    </>
+    </div>
   );
 }

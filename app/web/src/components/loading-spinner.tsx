@@ -3,7 +3,7 @@ export default function LoadingSpinner() {
     <svg
       aria-hidden="true"
       role="status"
-      className="me-3 inline h-4 w-4 animate-spin text-white"
+      className="me-1 inline h-4 w-4 animate-spin text-white"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,16 +1,16 @@
 "use client";
 
-import { createAvatar as createDicebearAvatar } from "@dicebear/core";
 import { bigEars } from "@dicebear/collection";
-import { useEffect, useMemo, useState } from "react";
-import { schema } from "@dicebear/core";
+import { createAvatar as createDicebearAvatar, schema } from "@dicebear/core";
 import avatarSchema, { AvatarSchema } from "@gatherzap/schemas/avatar-schema";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import {
   JSONSchema7,
   JSONSchema7Definition,
   JSONSchema7Type,
 } from "json-schema";
+import { useEffect, useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Avatar from "./avatar";
 
 const optionsSchema = {
   ...schema.properties,
@@ -30,19 +30,9 @@ export default function AvatarEditor({
         createDicebearAvatar(bigEars, {
           // NOTE: Required to make cheeks work for some reason
           cheekProbability: 100,
-        }).toJson().extra
-    )
+        }).toJson().extra,
+    ),
   );
-
-  const dicebearAvatar = useMemo(() => {
-    if (!avatar) {
-      return;
-    }
-
-    return createDicebearAvatar(bigEars, {
-      ...avatarToDicebearOptions(avatar),
-    });
-  }, [avatar]);
 
   useEffect(() => {
     if (!avatar || !onChange) {
@@ -53,33 +43,35 @@ export default function AvatarEditor({
   }, [avatar]);
 
   return (
-    <div>
-      {avatar && dicebearAvatar && (
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6">
+      {avatar && (
         <>
-          <img className="max-w-36" src={dicebearAvatar.toDataUri()} />
+          <div className="flex w-full flex-col items-center text-center">
+            <div className="w-full text-2xl">Avatar</div>
+            <Avatar options={avatar} />
+          </div>
           {Object.keys(avatar).map((key: string) => {
             return (
-              <div key={`avatar-editor-option-${key}`}>
-                <InputField
-                  name={key}
-                  type={getFieldTypeFromSchema(optionsSchema[key])}
-                  isNullable={avatarSchema.shape[
-                    key as keyof AvatarSchema
-                  ].isNullable()}
-                  value={avatar[key as keyof AvatarSchema] || null}
-                  choices={parseEnumValues(optionsSchema[key])}
-                  onChange={(value) => {
-                    setAvatar((oldOptions) => {
-                      return {
-                        ...(oldOptions ||
-                          initialAvatar ||
-                          avatarSchema.parse({})),
-                        [key]: value,
-                      };
-                    });
-                  }}
-                />
-              </div>
+              <InputField
+                key={`avatar-editor-option-${key}`}
+                name={key}
+                type={getFieldTypeFromSchema(optionsSchema[key])}
+                isNullable={avatarSchema.shape[
+                  key as keyof AvatarSchema
+                ].isNullable()}
+                value={avatar[key as keyof AvatarSchema] || null}
+                choices={parseEnumValues(optionsSchema[key])}
+                onChange={(value) => {
+                  setAvatar((oldOptions) => {
+                    return {
+                      ...(oldOptions ||
+                        initialAvatar ||
+                        avatarSchema.parse({})),
+                      [key]: value,
+                    };
+                  });
+                }}
+              />
             );
           })}
         </>
@@ -112,27 +104,19 @@ function InputField<T extends string | number | boolean>({
   }, [value]);
 
   return (
-    <>
-      {isNullable && (
-        <input
-          type="checkbox"
-          checked={value !== null}
-          onChange={(e) =>
-            onChange(e.target.checked ? lastValueBeforeNull : null)
-          }
-        />
-      )}
+    <div className="w-full">
       <label className="capitalize">
-        {name}
+        {name.replace(/([A-Z])/g, " $1").trim()}
+
         {type == "enum" ? (
-          <>
+          <div className="mt-1 flex w-full rounded-lg border border-gray-300 bg-gray-50 text-center text-gray-900">
             {choices && (
               <span
-                className="cursor-pointer select-none p-2"
+                className="cursor-pointer select-none border-r border-gray-300 p-2"
                 onClick={() => {
                   // Wrap around if necessary
                   const previousChoice = choices.at(
-                    choices.indexOf(value as string) - 1
+                    choices.indexOf(value as string) - 1,
                   ) as T;
                   onChange(previousChoice);
                 }}
@@ -147,20 +131,21 @@ function InputField<T extends string | number | boolean>({
                 value === null ? String(lastValueBeforeNull) : String(value)
               }
               onChange={(e) => onChange(e.target.value as T)}
+              className="w-full cursor-pointer bg-transparent p-2.5 text-center capitalize"
             >
               {choices?.sort().map((x: JSONSchema7Type, i: number) => (
                 <option
                   key={`avatar-editor-option-${name}-choice-${i}`}
                   value={String(x)}
                 >
-                  {String(x)}
+                  #{i + 1}
                 </option>
               ))}
             </select>
 
             {choices && (
               <span
-                className="cursor-pointer select-none p-2"
+                className="cursor-pointer select-none border-l border-gray-300 p-2"
                 onClick={() => {
                   const nextChoice = choices[
                     // Wrap around if necessary
@@ -172,7 +157,7 @@ function InputField<T extends string | number | boolean>({
                 <FaChevronRight className="inline" />
               </span>
             )}
-          </>
+          </div>
         ) : type == "boolean" ? (
           <input
             name={name}
@@ -186,6 +171,7 @@ function InputField<T extends string | number | boolean>({
             value={String(value)}
             type="color"
             onChange={(e) => onChange(e.target.value as T)}
+            className="mt-1 flex min-h-[1.8lh] w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 p-2 text-center text-gray-900"
           />
         ) : (
           <input
@@ -193,10 +179,27 @@ function InputField<T extends string | number | boolean>({
             value={String(value)}
             type="text"
             onChange={(e) => onChange(e.target.value as T)}
+            className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900"
           />
         )}
       </label>
-    </>
+
+      {isNullable && (
+        <label className="mt-1 flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={value !== null}
+            onChange={(e) =>
+              onChange(e.target.checked ? lastValueBeforeNull : null)
+            }
+            className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+          />
+          <small>
+            <em>Enabled</em>
+          </small>
+        </label>
+      )}
+    </div>
   );
 }
 
@@ -233,42 +236,6 @@ function getFieldTypeFromSchema(schema: JSONSchema7Definition) {
   }
 
   return "text";
-}
-
-/**
- * Convert from `AvatarSchema` to Dicebear's expected schema
- * by wrapping values in arrays, removing the `"#"` on colors,
- * and adding the `cheekProbability: 100`.
- */
-function avatarToDicebearOptions(avatar: AvatarSchema) {
-  return {
-    ...Object.fromEntries(
-      Object.entries(avatar).map(([key, value]) => {
-        const optionSchema = optionsSchema[key];
-
-        // NOTE: `JSONSchema7Definition` can be a boolean. Just leave this one alone.
-        if (typeof optionSchema == "boolean") {
-          return [key, value];
-        }
-
-        if (value === null) {
-          return [key, []];
-        }
-
-        const normalizedValue = isColor(optionSchema)
-          ? value.replace("#", "")
-          : value;
-
-        // NOTE: Dicebar requires values to be wrapped in an array.
-        return [
-          key,
-          isArray(optionSchema) ? [normalizedValue] : normalizedValue,
-        ];
-      })
-    ),
-    // NOTE: Required to make cheeks work for some reason
-    cheekProbability: 100,
-  };
 }
 
 function parseEnumValues(schema: JSONSchema7Definition) {

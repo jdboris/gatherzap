@@ -17,42 +17,28 @@ export default function Home() {
       >
         <header className="flex justify-between">
           <nav>
-            <Link
-              href={"/"}
-              className="text-primary inline-flex p-4 text-xl font-semibold"
-            >
+            <Link href={"/"} className="inline-flex p-4 text-xl font-semibold">
               Gatherzap
             </Link>
           </nav>
 
           <div className="inline-flex items-center px-2">
             <SignedOut>
-              <Link
-                href={"/sign-up"}
-                className="text-primary inline-flex px-2 py-4"
-              >
+              <Link href={"/sign-up"} className="inline-flex px-2 py-4">
                 Sign Up
               </Link>
-              <Link
-                href={"/log-in"}
-                className="text-primary inline-flex px-2 py-4"
-              >
+              <Link href={"/log-in"} className="inline-flex px-2 py-4">
                 Log In
               </Link>
             </SignedOut>
             <SignedIn>
               {!isLoadingUser && !user && (
-                <Link
-                  href="/account"
-                  className="text-primary inline-flex px-2 py-4"
-                >
+                <Link href="/account" className="inline-flex px-2 py-4">
                   Complete Account Setup
                 </Link>
               )}
               <SignOutButton>
-                <span className="text-primary inline-flex px-2 py-4">
-                  Sign Out
-                </span>
+                <span className="inline-flex px-2 py-4">Sign Out</span>
               </SignOutButton>
             </SignedIn>
           </div>
