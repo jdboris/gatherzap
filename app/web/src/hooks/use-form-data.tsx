@@ -19,11 +19,29 @@ export default function useFormData<D extends object, S extends ZodRawShape>({
   /** A callback to be called AFTER the form data state has been updated. */
   onSubmit: () => any;
 }) {
-  const [data, setData] =
-    useState<Partial<z.infer<typeof schema>>>(initialData);
+  type DataSchema = z.infer<typeof schema>;
+  const [data, setData] = useState<Partial<DataSchema>>(initialData);
   const [errors, setErrors] = useState<ZodIssue[]>([]);
   const [submitEvent, setSubmitEvent] =
     useState<FormEvent<HTMLFormElement> | null>(null);
+
+  const setValue = useCallback(
+    <T extends string>(key: keyof DataSchema, value: DataSchema[T]) => {
+      setData((old) => ({
+        ...old,
+        [key]: value,
+      }));
+
+      const { success } = schema.partial().safeParse({
+        [key]: value,
+      });
+
+      if (success) {
+        setErrors((old) => old.filter((x) => String(x.path) != key));
+      }
+    },
+    [],
+  );
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,39 +55,41 @@ export default function useFormData<D extends object, S extends ZodRawShape>({
       }));
 
       const { success } = schema.partial().safeParse({
-        [e.target.name]: parseValue(e.target.value, e.target.type),
+        [name]: parseValue(value, type),
       });
 
       if (success) {
-        setErrors((old) => old.filter((x) => String(x.path) != e.target.name));
+        setErrors((old) => old.filter((x) => String(x.path) != name));
+        e.target.ariaInvalid = null;
       }
     },
     [schema],
   );
 
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>) => {
-      // NOTE: Prevents the blur event from canceling the submit event if they happen at the same time.
-      setTimeout(() => {
-        const { type, name, value } = e.target;
+  const handleBlur = useCallback((e: FocusEvent<HTMLInputElement>) => {
+    // NOTE: Prevents the blur event from canceling the submit event if they happen at the same time.
+    setTimeout(() => {
+      const { type, name, value } = e.target;
 
-        setData((old) => ({
-          ...old,
-          [name]: parseValue(value, type),
-        }));
+      setData((old) => ({
+        ...old,
+        [name]: parseValue(value, type),
+      }));
 
-        const { success, error } = schema.partial().safeParse({
-          [e.target.name]: parseValue(e.target.value, e.target.type),
-        });
+      const { success, error } = schema.partial().safeParse({
+        [name]: parseValue(value, type),
+      });
 
-        setErrors((old) => [
-          ...old.filter((x) => String(x.path) != e.target.name),
-          ...(!success ? error.issues : []),
-        ]);
-      }, 100);
-    },
-    [data],
-  );
+      setErrors((old) => [
+        ...old.filter((x) => String(x.path) != name),
+        ...(!success ? error.issues : []),
+      ]);
+
+      if (!success) {
+        e.target.ariaInvalid = "true";
+      }
+    }, 100);
+  }, []);
 
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -104,13 +124,13 @@ export default function useFormData<D extends object, S extends ZodRawShape>({
   }, [submitEvent]);
 
   const isInvalid = useCallback(
-    (key: string) =>
+    (key: keyof DataSchema) =>
       errors.filter((x) => x.path[0] == key).map((x) => x.message).length > 0,
     [errors],
   );
 
   const getErrorMessages = useCallback(
-    (key: string) =>
+    (key: keyof DataSchema) =>
       errors.filter((x) => x.path[0] == key).map((x) => x.message),
     [errors],
   );
@@ -118,6 +138,8 @@ export default function useFormData<D extends object, S extends ZodRawShape>({
   return {
     /** The data parsed from the form, updated by `handleChange`, `handleBlur`, and `handleSubmit`. */
     data,
+    /** Sets the `value` of the given `key` in `data` and removes existing errors from `errors` for this key if its' value is valid. */
+    setValue,
     /** The validity erros in the form data, updated by `handleChange`, `handleBlur`, and `handleSubmit`. */
     errors,
     /** @returns All messages from `errors` for the given `key`. */
